@@ -16,132 +16,120 @@
 body {
   background: #0b0f19;
   color: white;
+  min-height: 100vh;
 }
 
 header {
-  background: #111827;
-  padding: 20px;
-  border-bottom: 1px solid #263247;
+  padding: 25px 18px;
+  text-align: center;
 }
 
 .logo {
-  font-size: 24px;
+  color: #22c55e;
+  font-size: 26px;
   font-weight: bold;
-  color: #38e879;
+  margin-bottom: 10px;
 }
 
 .subtitle {
   color: #9ca3af;
-  margin-top: 5px;
   font-size: 13px;
 }
 
-.search {
-  margin-top: 20px;
+.search-box {
+  margin: 30px auto;
+  max-width: 500px;
+  padding: 0 18px;
+}
+
+input {
   width: 100%;
-  padding: 14px;
-  border-radius: 10px;
+  padding: 16px;
   border: 1px solid #374151;
+  border-radius: 12px;
   background: #1f2937;
   color: white;
+  font-size: 14px;
   outline: none;
 }
 
-nav {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 15px;
-}
-
-nav button {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 20px;
-  background: #1f2937;
-  color: white;
-  white-space: nowrap;
-}
-
-nav button:hover {
-  background: #22c55e;
-  color: black;
+input:focus {
+  border-color: #22c55e;
 }
 
 main {
-  padding: 15px;
+  max-width: 600px;
+  margin: auto;
+  padding: 0 18px;
+}
+
+#results {
+  display: none;
 }
 
 h2 {
+  font-size: 18px;
   margin-bottom: 15px;
 }
 
-.products {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-  gap: 12px;
-}
-
-.card {
+.game {
   background: #151e2e;
   border: 1px solid #29364b;
   border-radius: 12px;
-  padding: 12px;
+  padding: 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
 }
 
-.image {
-  height: 100px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #253b58, #172033);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 38px;
-  margin-bottom: 10px;
+.game:hover {
+  border-color: #22c55e;
+}
+
+.game-name {
+  font-weight: bold;
+}
+
+.game-info {
+  color: #9ca3af;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+#message {
+  color: #9ca3af;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 15px;
+}
+
+#selected-game {
+  display: none;
+  margin-top: 25px;
+  background: #151e2e;
+  border: 1px solid #29364b;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
 }
 
 .category {
-  color: #38e879;
-  font-size: 11px;
-}
-
-.card h3 {
-  font-size: 14px;
-  margin: 7px 0;
-}
-
-.price {
-  color: #38e879;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.sold {
-  color: #9ca3af;
-  font-size: 11px;
-  margin-top: 6px;
-}
-
-.buy {
-  width: 100%;
-  margin-top: 12px;
-  padding: 10px;
+  padding: 14px;
+  background: #1f2937;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.category:hover {
   background: #22c55e;
   color: black;
-  font-weight: bold;
-}
-
-.buy:hover {
-  background: #86efac;
-}
-
-footer {
-  text-align: center;
-  padding: 30px;
-  color: #6b7280;
-  font-size: 12px;
 }
 </style>
 </head>
@@ -150,125 +138,103 @@ footer {
 
 <header>
   <div class="logo">NovaDev Market 🛒</div>
-  <div class="subtitle">Marketplace Roblox • Akun, Joki, Item & Gamepass</div>
-  <input
-    class="search"
-    id="search"
-    placeholder="Cari Blox Fruits, Fisch, Grow a Garden..."
-  >
+  <div class="subtitle">
+    Cari game Roblox untuk melihat marketplace
+  </div>
 </header>
 
-<nav>
-  <button onclick="filterProducts('Semua')">Semua</button>
-  <button onclick="filterProducts('Akun')">Akun</button>
-  <button onclick="filterProducts('Joki')">Joki</button>
-  <button onclick="filterProducts('Item')">Item</button>
-  <button onclick="filterProducts('Gamepass')">Gamepass</button>
-</nav>
+<div class="search-box">
+  <input
+    type="text"
+    id="search"
+    placeholder="Cari nama game..."
+    autocomplete="off"
+  >
+</div>
 
 <main>
-  <h2>Produk Terbaru 🔥</h2>
-  <div class="products" id="products"></div>
+  <div id="results">
+    <h2>Game ditemukan</h2>
+    <div id="game-list"></div>
+  </div>
+
+  <div id="message">
+    Ketik minimal 3 huruf untuk mencari game.
+  </div>
+
+  <div id="selected-game">
+    <h2 id="selected-name"></h2>
+    <p class="game-info">
+      Pilih kategori yang ingin kamu cari.
+    </p>
+
+    <div class="categories">
+      <button class="category">Akun</button>
+      <button class="category">Joki</button>
+      <button class="category">Item</button>
+      <button class="category">Gamepass</button>
+    </div>
+  </div>
 </main>
 
-<footer>
-  © 2026 NovaDev Market
-</footer>
-
 <script>
-const products = [
-  {
-    name: "Joki Level Blox Fruits",
-    game: "Blox Fruits",
-    category: "Joki",
-    price: 15000,
-    icon: "⚔️",
-    sold: 124
-  },
-  {
-    name: "Gamepass Grow a Garden",
-    game: "Grow a Garden",
-    category: "Gamepass",
-    price: 25000,
-    icon: "🌱",
-    sold: 86
-  },
-  {
-    name: "Item Fisch",
-    game: "Fisch",
-    category: "Item",
-    price: 10000,
-    icon: "🎣",
-    sold: 52
-  },
-  {
-    name: "Akun Brookhaven",
-    game: "Brookhaven",
-    category: "Akun",
-    price: 30000,
-    icon: "🏡",
-    sold: 21
-  }
+const games = [
+  "Blox Fruits",
+  "Grow a Garden",
+  "Fisch",
+  "Brookhaven"
 ];
 
-let currentCategory = "Semua";
+const search = document.getElementById("search");
+const results = document.getElementById("results");
+const gameList = document.getElementById("game-list");
+const message = document.getElementById("message");
+const selectedGame = document.getElementById("selected-game");
+const selectedName = document.getElementById("selected-name");
 
-function formatRupiah(price) {
-  return "Rp" + price.toLocaleString("id-ID");
-}
+search.addEventListener("input", function() {
+  const keyword = search.value.trim().toLowerCase();
 
-function showProducts() {
-  const search = document.getElementById("search").value.toLowerCase();
+  selectedGame.style.display = "none";
 
-  const result = products.filter(product => {
-    const matchCategory =
-      currentCategory === "Semua" ||
-      product.category === currentCategory;
-
-    const matchSearch =
-      product.name.toLowerCase().includes(search) ||
-      product.game.toLowerCase().includes(search);
-
-    return matchCategory && matchSearch;
-  });
-
-  const container = document.getElementById("products");
-
-  if (result.length === 0) {
-    container.innerHTML = "<p>Produk tidak ditemukan.</p>";
+  if (keyword.length < 3) {
+    results.style.display = "none";
+    message.style.display = "block";
+    message.textContent =
+      "Ketik minimal 3 huruf untuk mencari game.";
     return;
   }
 
-  container.innerHTML = result.map(product => `
-    <div class="card">
-      <div class="image">${product.icon}</div>
-      <div class="category">${product.category}</div>
-      <h3>${product.name}</h3>
-      <div class="price">${formatRupiah(product.price)}</div>
-      <div class="sold">Terjual ${product.sold}</div>
-      <button class="buy" onclick="buyProduct('${product.name}')">
-        Beli
-      </button>
+  const found = games.filter(game =>
+    game.toLowerCase().includes(keyword)
+  );
+
+  results.style.display = "block";
+
+  if (found.length === 0) {
+    gameList.innerHTML = "";
+    message.style.display = "block";
+    message.textContent = "Game tidak ditemukan.";
+    return;
+  }
+
+  message.style.display = "none";
+
+  gameList.innerHTML = found.map(game => `
+    <div class="game" onclick="chooseGame('${game}')">
+      <div class="game-name">${game}</div>
+      <div class="game-info">Roblox Game</div>
     </div>
   `).join("");
+});
+
+function chooseGame(game) {
+  selectedName.textContent = game;
+  selectedGame.style.display = "block";
+  results.style.display = "none";
+  message.style.display = "none";
 }
-
-function filterProducts(category) {
-  currentCategory = category;
-  showProducts();
-}
-
-function buyProduct(name) {
-  alert(
-    "Kamu memilih: " + name +
-    "\\nFitur checkout akan dibuat pada langkah berikutnya."
-  );
-}
-
-document.getElementById("search").addEventListener("input", showProducts);
-
-showProducts();
 </script>
 
 </body>
-  </html>
+</html>
