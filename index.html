@@ -1,12 +1,274 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dev Market</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaDev Market</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #0b0f19;
+  color: white;
+}
+
+header {
+  background: #111827;
+  padding: 20px;
+  border-bottom: 1px solid #263247;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #38e879;
+}
+
+.subtitle {
+  color: #9ca3af;
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+.search {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #374151;
+  background: #1f2937;
+  color: white;
+  outline: none;
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 15px;
+}
+
+nav button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 20px;
+  background: #1f2937;
+  color: white;
+  white-space: nowrap;
+}
+
+nav button:hover {
+  background: #22c55e;
+  color: black;
+}
+
+main {
+  padding: 15px;
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  background: #151e2e;
+  border: 1px solid #29364b;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.image {
+  height: 100px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #253b58, #172033);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+.category {
+  color: #38e879;
+  font-size: 11px;
+}
+
+.card h3 {
+  font-size: 14px;
+  margin: 7px 0;
+}
+
+.price {
+  color: #38e879;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.sold {
+  color: #9ca3af;
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+.buy {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #22c55e;
+  color: black;
+  font-weight: bold;
+}
+
+.buy:hover {
+  background: #86efac;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #6b7280;
+  font-size: 12px;
+}
+</style>
 </head>
+
 <body>
-  <h1>Selamat Datang di Dev Market</h1>
-  <p>Marketplace Roblox pilihanmu.</p>
+
+<header>
+  <div class="logo">NovaDev Market 🛒</div>
+  <div class="subtitle">Marketplace Roblox • Akun, Joki, Item & Gamepass</div>
+  <input
+    class="search"
+    id="search"
+    placeholder="Cari Blox Fruits, Fisch, Grow a Garden..."
+  >
+</header>
+
+<nav>
+  <button onclick="filterProducts('Semua')">Semua</button>
+  <button onclick="filterProducts('Akun')">Akun</button>
+  <button onclick="filterProducts('Joki')">Joki</button>
+  <button onclick="filterProducts('Item')">Item</button>
+  <button onclick="filterProducts('Gamepass')">Gamepass</button>
+</nav>
+
+<main>
+  <h2>Produk Terbaru 🔥</h2>
+  <div class="products" id="products"></div>
+</main>
+
+<footer>
+  © 2026 NovaDev Market
+</footer>
+
+<script>
+const products = [
+  {
+    name: "Joki Level Blox Fruits",
+    game: "Blox Fruits",
+    category: "Joki",
+    price: 15000,
+    icon: "⚔️",
+    sold: 124
+  },
+  {
+    name: "Gamepass Grow a Garden",
+    game: "Grow a Garden",
+    category: "Gamepass",
+    price: 25000,
+    icon: "🌱",
+    sold: 86
+  },
+  {
+    name: "Item Fisch",
+    game: "Fisch",
+    category: "Item",
+    price: 10000,
+    icon: "🎣",
+    sold: 52
+  },
+  {
+    name: "Akun Brookhaven",
+    game: "Brookhaven",
+    category: "Akun",
+    price: 30000,
+    icon: "🏡",
+    sold: 21
+  }
+];
+
+let currentCategory = "Semua";
+
+function formatRupiah(price) {
+  return "Rp" + price.toLocaleString("id-ID");
+}
+
+function showProducts() {
+  const search = document.getElementById("search").value.toLowerCase();
+
+  const result = products.filter(product => {
+    const matchCategory =
+      currentCategory === "Semua" ||
+      product.category === currentCategory;
+
+    const matchSearch =
+      product.name.toLowerCase().includes(search) ||
+      product.game.toLowerCase().includes(search);
+
+    return matchCategory && matchSearch;
+  });
+
+  const container = document.getElementById("products");
+
+  if (result.length === 0) {
+    container.innerHTML = "<p>Produk tidak ditemukan.</p>";
+    return;
+  }
+
+  container.innerHTML = result.map(product => `
+    <div class="card">
+      <div class="image">${product.icon}</div>
+      <div class="category">${product.category}</div>
+      <h3>${product.name}</h3>
+      <div class="price">${formatRupiah(product.price)}</div>
+      <div class="sold">Terjual ${product.sold}</div>
+      <button class="buy" onclick="buyProduct('${product.name}')">
+        Beli
+      </button>
+    </div>
+  `).join("");
+}
+
+function filterProducts(category) {
+  currentCategory = category;
+  showProducts();
+}
+
+function buyProduct(name) {
+  alert(
+    "Kamu memilih: " + name +
+    "\\nFitur checkout akan dibuat pada langkah berikutnya."
+  );
+}
+
+document.getElementById("search").addEventListener("input", showProducts);
+
+showProducts();
+</script>
+
 </body>
-</html>
+  </html>
